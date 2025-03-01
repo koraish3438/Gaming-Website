@@ -1,41 +1,51 @@
-document.querySelector('.search-box').addEventListener('focus', function() {
-    this.style.boxShadow = "0 0 10px #ff4081";
+// Modal Open & Close Functions
+function openModal(id) {
+    document.getElementById(id).style.display = "flex";
+}
+
+function closeModal(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+// Event Listeners for Buttons
+document.querySelector(".login-btn").addEventListener("click", function() {
+    openModal("login-modal");
 });
 
-// Open Modal Function
-function openModal(modalId) {
-    document.getElementById(modalId).style.display = "flex";
-}
+document.querySelector(".signup-btn").addEventListener("click", function() {
+    openModal("signup-modal");
+});
 
-// Close Modal Function
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = "none";
-}
-
-// Form Validation
-document.getElementById("login-form").addEventListener("submit", function(e) {
-    e.preventDefault();
+// Login Functionality
+document.getElementById("login-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
     let email = document.getElementById("login-email").value;
     let password = document.getElementById("login-password").value;
-    
-    if (email === "admin@example.com" && password === "123456") {
-        alert("Login Successful!");
+
+    let storedPassword = localStorage.getItem(email);
+
+    if (storedPassword && storedPassword === password) {
+        alert("✅ Login successful!");
         closeModal("login-modal");
     } else {
-        alert("Invalid Credentials!");
+        alert("❌ Invalid email or password!");
     }
 });
 
-document.getElementById("signup-form").addEventListener("submit", function(e) {
-    e.preventDefault();
+// Signup Functionality
+document.getElementById("signup-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    
     let name = document.getElementById("signup-name").value;
     let email = document.getElementById("signup-email").value;
     let password = document.getElementById("signup-password").value;
-    
-    if (name && email && password.length >= 6) {
-        alert("Signup Successful!");
-        closeModal("signup-modal");
+
+    if (localStorage.getItem(email)) {
+        alert("⚠️ Email already registered!");
     } else {
-        alert("Please fill all fields correctly!");
+        localStorage.setItem(email, password);
+        alert("✅ Signup successful! Now login.");
+        closeModal("signup-modal");
     }
 });
